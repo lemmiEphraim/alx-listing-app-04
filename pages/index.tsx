@@ -19,34 +19,25 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        // In a real app, you would use your actual API endpoint
-        // For now, we'll use a mock API response
-        const response = await axios.get('https://jsonplaceholder.typicode.com/photos?_limit=10');
-        
-        // Transform the API response to match our Property interface
-        const propertyData: Property[] = response.data.map((item: any, index: number) => ({
-          id: item.id,
-          title: `Beautiful Property ${index + 1}`,
-          location: `Location ${index + 1}, City`,
-          price: Math.floor(Math.random() * 300) + 100,
-          rating: (Math.random() * 2 + 3).toFixed(1), // Random rating between 3.0 and 5.0
-          reviewCount: Math.floor(Math.random() * 100),
-          image: item.url, // Using the image from the API
-          type: index % 3 === 0 ? 'Apartment' : index % 3 === 1 ? 'House' : 'Condo',
-        }));
-        
-        setProperties(propertyData);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch properties');
-        setLoading(false);
-        console.error('Error fetching properties:', err);
-      }
-    };
+  // Replace the useEffect code with this:
+useEffect(() => {
+  const fetchProperties = async () => {
+    try {
+      // Using mock service for demonstration
+      // In a real app, you would use axios with your actual API endpoint
+      const propertyData = await import('@/services/mockApi').then(module => module.fetchProperties());
+      setProperties(propertyData);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to fetch properties');
+      setLoading(false);
+      console.error('Error fetching properties:', err);
+    }
+  };
 
+  fetchProperties();
+}, []);
+  
     fetchProperties();
   }, []);
 
